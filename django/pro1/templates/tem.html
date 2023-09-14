@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
+    <link rel="shortcut icon" type="image/jpg" href="https://img.freepik.com/premium-vector/vector-cartoon-list-icon-comic-style-checklist-task-list-sign-illustration-pictogram-reminder-business-splash-effect-concept_157943-4309.jpg?w=740">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+      .table-container {
+        max-height: 250px; /* Set your desired height here */
+        max-width: 920px;
+        overflow-y: auto;
+        overflow-x: auto;
+        margin: 0 auto;
+         }
+      a {
+            text-decoration: none; /* Remove underline */
+            color: black; /* Change the color to your desired value */
+        }
+      .strikethrough {
+        text-decoration: line-through;
+        text-decoration-color: dark grey;
+        text-decoration-thickness: 1px;
+        }
+    </style>
+</head>
+<body>
+<br>
+<div class="text-center " style="font-size: 16px;
+        letter-spacing: 1px;
+        color: grey;
+        font-weight: bold">
+    TODO LIST of {{ user }}
+  <br>
+  <img width="100", height="100" src="https://img.freepik.com/premium-vector/vector-cartoon-list-icon-comic-style-checklist-task-list-sign-illustration-pictogram-reminder-business-splash-effect-concept_157943-4309.jpg?w=740" class="rounded" alt="...">
+  <br><a style="text-decoration: underline; color: blue" href="{% url 'logout' %}" >Logout</a>
+    <br>
+</div>
+<!--<br>-->
+<div class="table-container" style="text-align: center;">
+<table class="table caption-top table-sm" style="table-layout: fixed; border-collapse: collapse;max-width: 100%; margin: 0 auto;" >
+  <caption>List of tasks to-do</caption>
+  <thead  >
+    <tr>
+      <th scope="col" style="width: 5%; ">
+          <a href="?sort=completed">Status</a></th>
+      <th scope="col" style="width: 25%;">
+          <a href="?sort=priority">Priority</a></th>
+      <th scope="col" style="width: 70%;">
+          <a href="?sort=task">Tasks</a></th>
+      <th scope="col" style="width: 30%;">DueDate</th>
+      <th scope="col" style="width: 15%;">Action</th>
+
+    </tr>
+  </thead>
+</table>
+</div>
+<div class="table-container table-group-divider" style="text-align: center; padding: 05px;">
+<table id="myTable" class="table table-hover table-sm" style="table-layout: fixed; border-collapse: collapse;max-width: 100%; margin: 0 auto;" >
+  <tbody class="">
+    {% for todo in todos %}
+      <tr>
+        <td style="width: 7%">
+          <form method="post" action="">
+            {% csrf_token %}
+              {% if todo.completed %}
+                    <input type="hidden" name="task_id" value="{{ todo.id }}">
+                    <input type="checkbox" checked  onchange="this.form.submit()">
+              {% else %}
+                    <input type="hidden" name="task_id" value="{{ todo.id }}">
+                    <input type="checkbox"  onchange="this.form.submit()">
+              {% endif %}
+          </form>
+        </td>
+        <td style=" word-wrap: break-word; width: 22%">{{ todo.priority }}</td>
+          {% if todo.completed %}
+        <td class="strikethrough" style=" word-wrap: break-word; width: 70%">{{ todo.task }}</td>
+          {% else %}
+        <td style=" word-wrap: break-word; width: 78%">{{ todo.task }}</td>
+          {% endif %}
+        <td style=" word-wrap: break-word; width: 30%">{{ todo.due }}</td>
+        <td style=" width: 15%">
+          <form method="post"  >
+            {% csrf_token %}
+            <input type="hidden" name="s_id" value="{{ todo.id }}">
+            <button type="submit" name="delete" class="btn btn-primary">Delete</button>
+            </form>
+        </td>
+
+    {% empty %}
+        <td></td>
+        <td></td>
+        <td>No tasks yet.</td>
+        <td></td>
+        <td></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<br>
+<br>
+<div class="container" style="max-width: 700px">
+
+    <form method="post" action="">
+            {% csrf_token %}
+        <div class="input-group" style="text-align: center" >
+            <span class="input-group-text" >New Task</span>
+            <input type="text" required name="pr" placeholder="Priority: High, Medium, Low" class="form-control">
+            <input type="text" required name="tk"  placeholder="Task details"  class="form-control"><br>
+            <input type="date" name="dt" placeholder="Due date" class="form-control">
+            <button type="submit" name="add" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

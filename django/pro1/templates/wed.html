@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wedding Photos</title>
+    <!-- Add your custom CSS styles here -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .photo-gallery {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .photo {
+            flex: 1;
+            max-width: calc(33.33% - 20px); /* Show three photos at a time */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .photo img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Arrows */
+        .arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 1px solid #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .arrow:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .prev-arrow {
+            left: 10px;
+        }
+
+        .next-arrow {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Wedding Photos</h1>
+
+    <!-- Photo Gallery Container -->
+    <div class="photo-gallery">
+        {% for photo in photos %}
+            <div class="photo">
+                <img src="{% static 'images/'|add:photo %}" alt="Wedding Photo">
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- JavaScript for Photo Navigation -->
+    <script>
+        const photos = [{% for photo in photos %}"{% static 'images/'|add:photo %}",{% endfor %}];
+        let currentIndex = 0;
+
+        function showPrevPhotos() {
+            if (currentIndex > 0) {
+                currentIndex -= 3;
+                if (currentIndex < 0) {
+                    currentIndex = 0;
+                }
+                updatePhotos();
+            }
+        }
+
+        function showNextPhotos() {
+            if (currentIndex + 3 < photos.length) {
+                currentIndex += 3;
+                updatePhotos();
+            }
+        }
+
+        function updatePhotos() {
+            const photoGallery = document.querySelector(".photo-gallery");
+            photoGallery.scrollLeft = currentIndex * (photoGallery.offsetWidth / 3);
+        }
+    </script>
+
+    <!-- Arrows for Photo Navigation -->
+    <div class="arrow prev-arrow" onclick="showPrevPhotos()">&#10094;</div>
+    <div class="arrow next-arrow" onclick="showNextPhotos()">&#10095;</div>
+</body>
+</html>
