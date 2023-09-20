@@ -31,7 +31,7 @@
         letter-spacing: 1px;
         color: grey;
         font-weight: bold">
-    TODO LIST of {{ user }}
+    TODO LIST of {{ user.first_name }}
   <br>
   <img width="100", height="100" src="https://img.freepik.com/premium-vector/vector-cartoon-list-icon-comic-style-checklist-task-list-sign-illustration-pictogram-reminder-business-splash-effect-concept_157943-4309.jpg?w=740" class="rounded" alt="...">
   <br><a style="text-decoration: underline; color: blue" href="{% url 'logout' %}" >Logout</a>
@@ -49,7 +49,8 @@
           <a href="?sort=priority">Priority</a></th>
       <th scope="col" style="width: 70%;">
           <a href="?sort=task">Tasks</a></th>
-      <th scope="col" style="width: 30%;">DueDate</th>
+      <th scope="col" style="width: 30%;">
+          <a href="?sort=due">DueDate</a></th>
       <th scope="col" style="width: 15%;">Action</th>
 
     </tr>
@@ -107,7 +108,12 @@
             {% csrf_token %}
         <div class="input-group" style="text-align: center" >
             <span class="input-group-text" >New Task</span>
-            <input type="text" required name="pr" placeholder="Priority: High, Medium, Low" class="form-control">
+<!--            <input type="text" required name="pr" placeholder="Priority: High, Medium, Low" class="form-control">-->
+            <select required name="pr"  class="form-control">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
             <input type="text" required name="tk"  placeholder="Task details"  class="form-control"><br>
             <input type="date" name="dt" placeholder="Due date" class="form-control">
             <button type="submit" name="add" class="btn btn-primary">Add</button>
