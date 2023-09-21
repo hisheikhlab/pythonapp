@@ -9,6 +9,13 @@ from django.conf import settings
 from app.models import NewData, UserTable
 
 
+def default(request):
+    if request.user.is_authenticated:
+        return redirect('users', user_id=request.user.id)
+    else:
+        return render(request, 'login.html')
+
+
 def log(request):
     if request.user.is_authenticated:
         return redirect('users', user_id=request.user.id)

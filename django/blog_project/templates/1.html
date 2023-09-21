@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }}</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your custom CSS file -->
+    <!-- Add any additional meta tags, fonts, or external CSS/JS libraries as needed -->
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">My Blog</a>
+            </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <!-- Add more navigation links as needed -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <article class="post">
+            <header class="post-header">
+                <h1>{{ post.title }}</h1>
+                <p class="author">By {{ post.author }}</p>
+                <p class="date">Published on {{ post.date_posted|date:"F d, Y" }}</p>
+            </header>
+            <div class="post-content">
+                {{ post.content|safe }}
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <p>&copy; {{ post.date_posted|date:"Y" }} My Blog. All rights reserved.</p>
+        <!-- Add social media icons or additional footer content here -->
+    </footer>
+</body>
+</html>
