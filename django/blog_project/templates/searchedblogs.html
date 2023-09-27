@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Blog</title>
+    <title>{{ blog.title }} - Family Blog</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
 </head>
@@ -32,16 +32,22 @@
     </div>
 </nav>
 
+
 <div class="container mt-4">
-    <!-- Blog Posts -->
+    <!-- Recent Blog Posts -->
+    <h2>Search results for "{{query}}"</h2>
     <div class="row">
-        {% for post in blog_posts %}
+        <!-- Mock Blog Post 1 -->
+        {% for result in results %}
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+
+                <img src="{{result.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Blog 1">
                 <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.content }}</p>
+                    <h5 class="card-title">{{result.title}}</h5>
+                    <p class="card-text">Published: {{result.date}}</p>
+                    <a href="/blog/{{ result.id}}/" class="btn btn-primary">Read More</a>
+
                 </div>
             </div>
         </div>
@@ -49,30 +55,6 @@
     </div>
 </div>
 
-<!-- Add Blog Form -->
-<div class="container mt-4">
-    <h2>Add a Blog</h2>
-    <form method="post" enctype="multipart/form-data" action="">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="tt" required>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="ds" rows="2" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" name="cn" rows="4" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Image</label>
-            <input type="file" class="form-control" id="image" name="im" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
 
 <!-- Include Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

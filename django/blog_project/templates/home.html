@@ -6,6 +6,7 @@
     <title>Family Blog</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
 
@@ -22,12 +23,34 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add_blog">Add Blog</a>
+                    <a class="nav-link" href="/add">Add Blog</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/add_blog">Logout</a>
+                </li>
+
             </ul>
         </div>
     </div>
 </nav>
+
+<div class="container mt-4">
+    <!-- Search Bar -->
+    <div class="row">
+        <div class="col-md-8">
+            <form action="/search_results/" method="GET" class="form-inline">
+                <div class="input-group">
+                    <input type="text" name="query" placeholder="Search..." class="form-control">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-search"></i> <!-- Font Awesome search icon -->
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container mt-4">
     <!-- Featured Blog Post -->
@@ -50,49 +73,54 @@
     <h2>Recent Blog Posts</h2>
     <div class="row">
         <!-- Mock Blog Post 1 -->
+        {% for blog in blogs %}
         <div class="col-md-4">
             <div class="card mb-4">
-                <img src="C:\Users\Python\Pictures\photos\IMG_20200913_110451.jpg" class="card-img-top" alt="Blog 1">
+
+                <img src="{{blog.pic.url}}" class="card-img-top" alt="Blog 1">
                 <div class="card-body">
-                    <h5 class="card-title">A Day at the Zoo</h5>
-                    <p class="card-text">We visited the local zoo and had a blast seeing all the animals.</p>
-                    <a href="/blog/2/" class="btn btn-primary">Read More</a>
+                    <h5 class="card-title">{{blog.title}}</h5>
+                    <p class="card-text">Published: {{blog.date}}</p>
+                    <p class="card-text">{{blog.desc}}</p>
+                    <a href="/blog/{{ blog.id}}/" class="btn btn-primary">Read More</a>
+
                 </div>
             </div>
         </div>
-        <!-- Mock Blog Post 2 -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="" class="card-img-top" alt="Blog 2">
-                <div class="card-body">
-                    <h5 class="card-title">Baking Cookies Together</h5>
-                    <p class="card-text">We spent a rainy day indoors baking delicious cookies as a family.</p>
-                    <a href="/blog/3/" class="btn btn-primary">Read More</a>
-                </div>
-            </div>
-        </div>
-        <!-- Mock Blog Post 3 -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="" class="card-img-top" alt="Blog 3">
-                <div class="card-body">
-                    <h5 class="card-title">Our Family Vacation</h5>
-                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>
-                    <a href="/blog/4/" class="btn btn-primary">Read More</a>
-                </div>
-            </div>
-        </div>
-        <!-- Mock Blog Post 4 -->
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="" class="card-img-top" alt="Blog 4">
-                <div class="card-body">
-                    <h5 class="card-title">Vacation</h5>
-                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>
-                    <a href="/blog/4/" class="btn btn-primary">Read More</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
+<!--        &lt;!&ndash; Mock Blog Post 2 &ndash;&gt;-->
+<!--        <div class="col-md-4">-->
+<!--            <div class="card mb-4">-->
+<!--                <img src="" class="card-img-top" alt="Blog 2">-->
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">Baking Cookies Together</h5>-->
+<!--                    <p class="card-text">We spent a rainy day indoors baking delicious cookies as a family.</p>-->
+<!--                    <a href="/blog/3/" class="btn btn-primary">Read More</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Mock Blog Post 3 &ndash;&gt;-->
+<!--        <div class="col-md-4">-->
+<!--            <div class="card mb-4">-->
+<!--                <img src="" class="card-img-top" alt="Blog 3">-->
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">Our Family Vacation</h5>-->
+<!--                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>-->
+<!--                    <a href="/blog/4/" class="btn btn-primary">Read More</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; Mock Blog Post 4 &ndash;&gt;-->
+<!--        <div class="col-md-4">-->
+<!--            <div class="card mb-4">-->
+<!--                <img src="" class="card-img-top" alt="Blog 4">-->
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">Vacation</h5>-->
+<!--                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>-->
+<!--                    <a href="/blog/4/" class="btn btn-primary">Read More</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 </div>
 
