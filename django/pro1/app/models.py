@@ -22,7 +22,7 @@ class NewData(models.Model):
     priority = models.CharField(max_length=200)
     task = models.CharField(max_length=200)
     completed = models.BooleanField(default=False)  # Add this field for completion status
-    due = models.CharField(max_length=200, default="No due date")
+    due = models.DateField(default="No due date")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

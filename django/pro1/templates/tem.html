@@ -77,6 +77,8 @@
         <td style=" word-wrap: break-word; width: 22%">{{ todo.priority }}</td>
           {% if todo.completed %}
         <td class="strikethrough" style=" word-wrap: break-word; width: 70%">{{ todo.task }}</td>
+          {% elif todo.due < date_today %}
+        <td style=" word-wrap: break-word; width: 78%; color: red">{{ todo.task }} (overdue)</td>
           {% else %}
         <td style=" word-wrap: break-word; width: 78%">{{ todo.task }}</td>
           {% endif %}
@@ -109,7 +111,7 @@
         <div class="input-group" style="text-align: center" >
             <span class="input-group-text" >New Task</span>
 <!--            <input type="text" required name="pr" placeholder="Priority: High, Medium, Low" class="form-control">-->
-            <select required name="pr"  class="form-control">
+            <select required name="pr"  class="form-control" >
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>

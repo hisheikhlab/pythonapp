@@ -7,4 +7,4 @@ def add(request):
     return render(request, 'Add blog.html')
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'main.html')

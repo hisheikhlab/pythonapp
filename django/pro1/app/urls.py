@@ -21,9 +21,12 @@ from django.contrib.auth import views as auth_views  # Import Django's auth view
 
 
 urlpatterns = [
-    path('',views.default, name='defaultpage'),
+    path('', views.default, name='defaultpage'),
     path('login/', views.log, name='login'),
-    path('user/<int:user_id>/', views.todo, name='users'),
+    path('user/<str:user_id>/', views.todo, name='users'),
     path('logout/', views.logo, name='logout'),
     path('signup/', views.reg, name='signup'),
+    path('activate/<str:new_id>/', views.activate, name='activate'),
 ]
+
+
