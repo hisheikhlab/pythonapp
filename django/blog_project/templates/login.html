@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List-Sign in</title>
-    <link rel="shortcut icon" type="image/jpg" href="https://img.freepik.com/premium-vector/vector-cartoon-list-icon-comic-style-checklist-task-list-sign-illustration-pictogram-reminder-business-splash-effect-concept_157943-4309.jpg?w=740">
+    <title>Sign in</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
       .table-container {
@@ -27,32 +26,30 @@
 </head>
 <body>
 <br>
+<br>
+
 <div class="text-center " style="font-size: 16px;
         letter-spacing: 1px;
         color: grey;
         font-weight: bold">
-    TODO LIST
-  <br>
-  <img width="100", height="100" src="https://img.freepik.com/premium-vector/vector-cartoon-list-icon-comic-style-checklist-task-list-sign-illustration-pictogram-reminder-business-splash-effect-concept_157943-4309.jpg?w=740" class="rounded" alt="...">
+    Welcome to <br>Family Blog.
   <br><br><br>
 </div>
 <div class="container" style="max-width: 400px">
-    <form method="post" action="{% url 'login' %}">
+    <form method="post" action="">
         {% csrf_token %}
-          <span class="" style=" ">Welcome</span><br><br>
+          <span class="" style=" ">Enter</span><br><br>
           <input type="text" placeholder="username" class="form-control" name="user" required><br>
           <input type="password" placeholder="password" class="form-control" name="pas" required><br>
           <button class="btn btn-primary" type="submit" name="log" >Login</button>
-          <a href="/signup/">Register</a><br><br>
-          <a href="/password_reset/">Forgot Password?</a>
-
+          <a href="/signup/">Register</a>
     </form><br>
 </div>
 <div class="text-center " style="font-size: 16px;
         letter-spacing: 1px;
         color: red;
         font-weight: bold">
-    {{no_u}}
+    {{mess}}
 </div>
 </body>
 </html>

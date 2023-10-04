@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth import login, logout, authenticate
@@ -8,6 +10,8 @@ from django.conf import settings
 from app.models import NewData, UserTable
 import jwt
 from datetime import date
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, \
+    PasswordResetCompleteView
 
 
 def default(request):
@@ -34,6 +38,10 @@ def log(request):
     return render(request, 'login.html')
 
 
+def is_valid_password(password):
+    pattern = r'(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}'
+    return bool(re.match(pattern, password))
+
 def reg(request):
     if request.user.is_authenticated:
         return redirect('users', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
@@ -48,6 +56,9 @@ def reg(request):
             if checkem is not None:
                 pass
                 return render(request, 'signup.html', {'checkem': f'Email {em} is already registered'})
+            elif not is_valid_password(pas):
+                return render(request, 'signup.html', {
+                    'checku': 'Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter and one special character.'})
             else:
                 try:
                     u = User.objects.create_user(first_name=fr,
@@ -92,11 +103,13 @@ def todo(request, user_id):
         if dec_id['id'] == request.user.id:
             date_today = date.today()
             if request.method == 'POST':
-                if 'add' in request.POST:
+                if 'add task' in request.POST:
                     pr = request.POST['pr']
                     tk = request.POST['tk']
                     dt = request.POST['dt']
+                    print(dt)
                     NewData.objects.create(priority=pr, task=tk, due=dt, user=request.user)
+                    print("created")
                 elif 'delete' in request.POST:
                     todo_del_id = request.POST['s_id']
                     todo_del = NewData.objects.get(pk=todo_del_id)
@@ -133,3 +146,6 @@ def activate(request, new_id):
     new_user.save()
     return render(request, 'login.html', {'no_u': f'Welcome, New account activated for {new_user.email}'})
     # return redirect('users', user_id=new_id)
+
+
+# def customPasswordResetView(PasswordResetView):

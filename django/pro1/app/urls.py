@@ -18,8 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views  # Import Django's auth views
-
-
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 urlpatterns = [
     path('', views.default, name='defaultpage'),
     path('login/', views.log, name='login'),
@@ -27,8 +27,25 @@ urlpatterns = [
     path('logout/', views.logo, name='logout'),
     path('signup/', views.reg, name='signup'),
     path('activate/<str:new_id>/', views.activate, name='activate'),
+    path('password_reset/', PasswordResetView.as_view(template_name='forget password.html'), name='password_reset'),
+    path('password_change/', PasswordChangeView.as_view(template_name='change password.html', extra_context={'status':
+                                                                                                             'change'}),
+         name='password_change'),
+    path('password_change_done/', PasswordChangeDoneView.as_view(template_name='change password.html', extra_context={'status':
+                                                                                                                  'done'}),
+         name='password_change_done'),
+    path('password_reset_done/', PasswordResetDoneView.as_view(template_name='forget password.html',
+                                                               extra_context={'status': 'done'}),
+         name='password_reset_done'),
+    path('password_reset_confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='forget '
+                                                                                                    'password.html',
+                                                                                      extra_context={'status':
+                                                                                                     'confirmed'}),
+         name='password_reset_confirm'),
+    path('password_reset_complete/', PasswordResetCompleteView.as_view(template_name='forget '
+                                                                                     'password.html',
+                                                                       extra_context={'status':
+                                                                                          'completed'}),
+         name='password_reset_complete'),
+
 ]
-
-
-
-

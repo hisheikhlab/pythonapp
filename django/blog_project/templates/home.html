@@ -23,45 +23,33 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add">Add Blog</a>
+                    <a class="nav-link" href="/add/">Add Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/add_blog">Logout</a>
+                    <a class="nav-link" href="/search/">Search</a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout/">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
-    <!-- Search Bar -->
-    <div class="row">
-        <div class="col-md-8">
-            <form action="/search_results/" method="GET" class="form-inline">
-                <div class="input-group">
-                    <input type="text" name="query" placeholder="Search..." class="form-control">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-search"></i> <!-- Font Awesome search icon -->
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <div class="container mt-4">
+    <h2>Featured</h2>
     <!-- Featured Blog Post -->
     <div class="row">
         <div class="col-md-8">
             <div class="card mb-4">
-                <img src="C:\Users\Python\Pictures\photos\IMG_20200913_110451.jpg" class="card-img-top" alt="Featured Blog">
+                <img src="{{featured.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Featured Blog">
                 <div class="card-body">
-                    <h5 class="card-title">Our Recent Family Adventure</h5>
-                    <p class="card-text">We had an amazing time exploring the great outdoors as a family. Read about our adventure and see the photos!</p>
-                    <a href="/blog/1/" class="btn btn-primary">Read More</a>
+                    <h5 class="card-title">{{featured.title}}</h5>
+                    <p class="card-text">Published: {{featured.date}}<br>Author: {{featured.author}}</p>
+<!--                    <p class="card-text">{{featured.desc}}</p>-->
+                    <a href="/blog/{{ featured.id }}/" class="btn btn-primary">Read More</a>
                 </div>
             </div>
         </div>
@@ -75,12 +63,13 @@
         <!-- Mock Blog Post 1 -->
         {% for blog in blogs %}
         <div class="col-md-4">
-            <div class="card mb-4">
+            <div class="card mb-4" >
 
-                <img src="{{blog.pic.url}}" class="card-img-top" alt="Blog 1">
+                <img src="{{blog.pic.url}}" class="card-img-top" style="object-fit: cover; width: 100%; height: 100%;" alt="Blog" >
                 <div class="card-body">
                     <h5 class="card-title">{{blog.title}}</h5>
-                    <p class="card-text">Published: {{blog.date}}</p>
+                    <p class="card-text">Published: {{blog.date}}<br>Author: {{blog.author}}</p>
+<!--                    <p class="card-text">Author: {{blog.author}}</p>-->
                     <p class="card-text">{{blog.desc}}</p>
                     <a href="/blog/{{ blog.id}}/" class="btn btn-primary">Read More</a>
 

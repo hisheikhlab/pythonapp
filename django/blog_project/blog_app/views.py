@@ -1,40 +1,111 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .models import BlogPost
-import datetime
+from .models import BlogPost, BlogImage
+import random
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, logout, authenticate
+import jwt
 
 
 # Create your views here.
 
 
+def default(request):
+    if request.user.is_authenticated:
+        return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
+    else:
+        return render(request, 'login.html')
+
+
+def log(request):
+    if request.user.is_authenticated:
+        return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
+    if request.method == 'POST':
+        usr = request.POST['user']
+        pas = request.POST['pas']
+        user = authenticate(request, username=usr, password=pas)
+        if user is not None:
+            login(request, user)
+            return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
+        elif user is None:
+            return render(request, 'login.html', {'mess': "Username or password incorrect"})
+    return render(request, 'login.html')
+
+
+def logou(request):
+    logout(request)
+    return redirect('login')
+
+
+@login_required(login_url='login')
 def add(request):
     if request.method == 'POST':
         # if 'submit' in request:
         titl = request.POST['tt']
         desc = request.POST['ds']
         cont = request.POST['cn']
-        image = request.FILES['im']
-        BlogPost.objects.create(title=titl, desc=desc, Content=cont, pic=image)
-        # new_blog = BlogPost.objects.create(title=title, desc= desc, content=content, pic=img)
-        # new_blog.save()
-        return redirect("blog")
+        new_blog = BlogPost.objects.create(title=titl, desc=desc, Content=cont, author=request.user)
 
+        for image in request.FILES.getlist('im'):
+            BlogImage.objects.create(blog=new_blog, pic=image)
+        return redirect("blog", blog_id=new_blog.id)
     return render(request, 'Add blog.html')
 
 
+@login_required(login_url='login')
+def delete(request):
+    print(request.method)
+    if request.method == 'POST':
+        if 'confirm_delete' in request.POST:
+            print(request.POST['confirm_delete'])
+            to_delete = BlogPost.objects.get(id=request.POST['confirm_delete'])
+            to_delete.delete()
+            return redirect("home", user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
+    return render(request, 'Add blog.html')
+
+
+@login_required(login_url='login')
 def blog(request, blog_id):
     blog_this = BlogPost.objects.get(id=blog_id)
-    return render(request, 'blog.html', {'blog': blog_this})
+    blog_this_images = BlogImage.objects.filter(blog=blog_this)
+    if request.method == 'POST':
+        if 'delete' in request.POST:
+            return render(request, 'blog.html', {'blog': blog_this, 'deleteme': 'Yes'})
+    return render(request, 'blog.html', {'blog': blog_this, 'blog_images': blog_this_images})
 
 
-def home(request):
-    blogs = BlogPost.objects.order_by('-date')
-    return render(request, 'home.html', {'blogs': blogs})
+@login_required(login_url='login')
+def home(request, user_id):
+    dec_id = jwt.decode(user_id, "secret", algorithms=["HS256"])
+    if dec_id['id'] == request.user.id:
+        blogs = BlogPost.objects.order_by('-date')
+        img =  BlogImage.objects.filter(blog=blogs)
+        # featured_blog = random.choice(blogs)
+        # return render(request, 'home.html', {'blogs': blogs, 'featured': featured_blog})
+        return render(request, 'home.html', {'blogs': blogs})
+    else:
+        return redirect("logout")
 
 
+def signup(request):
+    if request.user.is_authenticated:
+        return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
+    if request.method == 'POST':
+        user = request.POST['user']
+        em = request.POST['em']
+        pas = request.POST['pas']
+        new_user = User.objects.create_user(email=em, username=user, password=pas)
+        new_user.save()
+        return redirect('login')
+    return render(request, 'signup.html')
+
+
+@login_required(login_url='login')
 def search(request):
     if "query" in request.GET:
         query = request.GET['query']
-        results = BlogPost.objects.filter(title__icontains=query) | BlogPost.objects.filter(title__icontains=query)
+        results = BlogPost.objects.filter(title__icontains=query) | BlogPost.objects.filter(desc__icontains=query) | BlogPost.objects.filter(Content__icontains=query)
         print(query)
         print(results)
         return render(request, 'searchedblogs.html', {'results': results, 'query': query})
+    return render(request, 'searchedblogs.html')

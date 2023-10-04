@@ -21,10 +21,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('', views.default, name='default'),
     path('add/', views.add, name='add'),
-    path('', views.home, name='home'),
+    path('delete/', views.delete, name='delete'),
+    path('login/', views.log, name='login'),
+    path('logout/', views.logou, name='logout'),
+    path('signup/', views.signup, name='signup'),
+    path('home/<str:user_id>/', views.home, name='home'),
     path('blog/<int:blog_id>/', views.blog, name='blog'),
-    path('search_results/', views.search, name='search'),
+    path('search/', views.search, name='search'),
 ]
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
