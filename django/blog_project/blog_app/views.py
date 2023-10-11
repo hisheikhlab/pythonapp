@@ -18,13 +18,14 @@ def default(request):
 
 
 def log(request):
+    print(request.method)
     if request.user.is_authenticated:
         return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
     if request.method == 'POST':
         usr = request.POST['user']
         pas = request.POST['pas']
         user = authenticate(request, username=usr, password=pas)
-        print(user)
+        print(usr)
         if user is not None:
             login(request, user)
             return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
@@ -41,12 +42,10 @@ def logou(request):
 @login_required(login_url='login')
 def add(request):
     if request.method == 'POST':
-        # if 'submit' in request:
         titl = request.POST['tt']
         desc = request.POST['ds']
         cont = request.POST['cn']
         new_blog = BlogPost.objects.create(title=titl, desc=desc, Content=cont, author=request.user)
-
         for image in request.FILES.getlist('im'):
             BlogImage.objects.create(blog=new_blog, pic=image)
         return redirect("blog", blog_id=new_blog.id)
@@ -68,11 +67,10 @@ def delete(request):
 @login_required(login_url='login')
 def blog(request, blog_id):
     blog_this = BlogPost.objects.get(id=blog_id)
-    blog_this_images = BlogImage.objects.filter(blog=blog_this)
     if request.method == 'POST':
         if 'delete' in request.POST:
             return render(request, 'blog.html', {'blog': blog_this, 'deleteme': 'Yes'})
-    return render(request, 'blog.html', {'blog': blog_this, 'blog_images': blog_this_images})
+    return render(request, 'blog.html', {'blog': blog_this})
 
 
 @login_required(login_url='login')
