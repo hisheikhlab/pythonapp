@@ -1,28 +1,9 @@
 {% extends 'home.html' %}
 
 
-{% block title %}Search - Family Blog{% endblock %}
+{% block title %}Search - Blog{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <!-- Search Bar -->
-    <div class="row">
-        <div class="col-md-8">
-            <form action="/search/" method="GET" class="form-inline">
-                <div class="input-group">
-                    <input type="text" name="query" placeholder="Search..." class="form-control">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-search"></i> <!-- Font Awesome search icon -->
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-{% if query is not None %}
 <div class="container mt-4">
     <!-- Recent Blog Posts -->
     <h2>Search results for "{{query}}"</h2>
@@ -37,7 +18,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{result.title}}</h5>
                     <p class="card-text">Published: {{result.date}}</p>
-                    <a href="/blog/{{ result.id}}/" class="btn btn-primary">Read More</a>
+                    <a style="border: white ;background-color: burlywood;" href="/blog/{{ result.id}}/" class="btn btn-primary">Read More</a>
 
                 </div>
             </div>
@@ -45,7 +26,6 @@
         {% endfor %}
     </div>
 </div>
-{% endif %}
 
 
 {% endblock%}

@@ -80,8 +80,11 @@ def home(request, user_id):
     dec_id = jwt.decode(user_id, "secret", algorithms=["HS256"])
     if dec_id['id'] == request.user.id:
         blogs = BlogPost.objects.order_by('-date')
+        random_integer = random.randint(1, len(blogs))
         featured_blog = random.choice(blogs)
-        return render(request, 'home.html', {'blogs': blogs, 'featured': featured_blog})
+        return render(request, 'home.html', {'blogs': blogs,
+                                             'featured': featured_blog,
+                                             'random_integer': random_integer})
     else:
         return redirect("logout")
 
@@ -93,8 +96,11 @@ def signup(request):
         user = request.POST['user']
         em = request.POST['em']
         pas = request.POST['pas']
-        new_user = User.objects.create_user(email=em, username=user, password=pas)
-        new_user.save()
+        try:
+            new_user = User.objects.create_user(email=em, username=user, password=pas)
+            new_user.save()
+        except:
+            return render(request, 'signup.html', {'mess':'Username already taken'})
         return redirect('login')
     return render(request, 'signup.html')
 

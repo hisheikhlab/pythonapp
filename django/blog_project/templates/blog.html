@@ -51,41 +51,17 @@
             <div class="card mb-4 mx-auto" style="padding: 5px;background-color:rgba(222, 184, 135, 0.18)">
                     <p>Published: {{ blog.date }}<br>Author: {{ blog.author }}</p>
                     <!-- Include the detailed content of the blog post here -->
-                    <div>{{ blog.Content}}</div><br>
+                    <div>{{ blog.Content | linebreaks }}</div><br>
             </div>
     </div>
     {% if request.user.is_staff %}
     <form method="post" action="">
         {% csrf_token %}
-        <button type="submit" name="delete" class="btn btn-primary">Delete this blog</button>
+        <button style="border: white ;background-color: burlywood;" type="submit" name="delete" class="btn btn-primary">Delete this blog</button>
     </form><br><br>
     {% endif %}
 </div>
 {% else %}
-<div class="container mt-4">
-    <!-- Recent Blog Posts -->
-    <h2>Are you sure you want to delete this blog?</h2>
-
-    <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <img src="{{blog.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Featured Blog">
-                <div class="card-body">
-                    <h5 class="card-title">{{blog.title}}</h5>
-                    <p class="card-text">Published: {{blog.date}}<br>Author: {{blog.author}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-        {% if request.user.is_staff %}
-        <form method="post" action="{% url 'delete' %}" >
-            {% csrf_token %}
-            <input type="hidden" name="confirm_delete" value="{{ blog.id }}">
-            <button type="submit" name="delete" class="btn btn-primary">Yes, I am sure</button>
-            </form>
-        {% endif %}
-</div>
+    {% include 'confirm-delete.html' %}
 {% endif %}
 {% endblock%}

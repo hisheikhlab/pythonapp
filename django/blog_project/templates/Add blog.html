@@ -4,23 +4,6 @@
 {% block title %}Add Blog{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <!-- Blog Posts -->
-    <div class="row">
-        {% for post in blog_posts %}
-        <div class="col-md-4">
-            <div class="card mb-4">
-                <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ post.title }}</h5>
-                    <p class="card-text">{{ post.content }}</p>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
 <!-- Add Blog Form -->
 <div class="container mt-4">
     <h2>Add a Blog</h2>
@@ -42,7 +25,8 @@
             <label for="image" class="form-label">Image</label>
             <input type="file" class="form-control" id="image" name="im" multiple required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button style="border: white ;background-color: burlywood;" type="submit" class="btn btn-primary">Submit</button>
+        <br><br>
     </form>
 </div>
 
