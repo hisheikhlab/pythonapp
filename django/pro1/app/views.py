@@ -58,7 +58,8 @@ def reg(request):
                 return render(request, 'signup.html', {'checkem': f'Email {em} is already registered'})
             elif not is_valid_password(pas):
                 return render(request, 'signup.html', {
-                    'checku': 'Invalid password. Password must be at least 8 characters long and contain at least one uppercase letter and one special character.'})
+                    'checku': 'Invalid password. Password must be at least 8 characters long and contain at least one '
+                              'uppercase letter and one special character.'})
             else:
                 try:
                     u = User.objects.create_user(first_name=fr,
@@ -148,4 +149,5 @@ def activate(request, new_id):
     # return redirect('users', user_id=new_id)
 
 
-# def customPasswordResetView(PasswordResetView):
+def cosmetic(request):
+    return render(request, 'cosmetic.html')

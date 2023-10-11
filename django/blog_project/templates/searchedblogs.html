@@ -1,41 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ blog.title }} - Family Blog</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
-<body>
+{% extends 'home.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">Family Blog</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/add/">Add Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/search/">Search</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout/">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
+{% block title %}Search - Family Blog{% endblock %}
+
+{% block content %}
 <div class="container mt-4">
     <!-- Search Bar -->
     <div class="row">
@@ -63,8 +31,9 @@
         {% for result in results %}
         <div class="col-md-4">
             <div class="card mb-4">
-
-                <img src="{{result.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Blog 1">
+                {% with result.images.first as i %}
+                <img src="{{i.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Blog 1">
+                {% endwith %}
                 <div class="card-body">
                     <h5 class="card-title">{{result.title}}</h5>
                     <p class="card-text">Published: {{result.date}}</p>
@@ -79,8 +48,4 @@
 {% endif %}
 
 
-<!-- Include Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock%}

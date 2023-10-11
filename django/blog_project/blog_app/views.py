@@ -24,11 +24,12 @@ def log(request):
         usr = request.POST['user']
         pas = request.POST['pas']
         user = authenticate(request, username=usr, password=pas)
+        print(user)
         if user is not None:
             login(request, user)
             return redirect('home', user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
         elif user is None:
-            return render(request, 'login.html', {'mess': "Username or password incorrect"})
+            return render(request, 'login.html', {"mess": "Username or password incorrect"})
     return render(request, 'login.html')
 
 
@@ -57,7 +58,7 @@ def delete(request):
     print(request.method)
     if request.method == 'POST':
         if 'confirm_delete' in request.POST:
-            print(request.POST['confirm_delete'])
+            # print(request.POST['confirm_delete'])
             to_delete = BlogPost.objects.get(id=request.POST['confirm_delete'])
             to_delete.delete()
             return redirect("home", user_id=jwt.encode({'id': request.user.id}, "secret", algorithm="HS256"))
@@ -79,10 +80,8 @@ def home(request, user_id):
     dec_id = jwt.decode(user_id, "secret", algorithms=["HS256"])
     if dec_id['id'] == request.user.id:
         blogs = BlogPost.objects.order_by('-date')
-        img =  BlogImage.objects.filter(blog=blogs)
-        # featured_blog = random.choice(blogs)
-        # return render(request, 'home.html', {'blogs': blogs, 'featured': featured_blog})
-        return render(request, 'home.html', {'blogs': blogs})
+        featured_blog = random.choice(blogs)
+        return render(request, 'home.html', {'blogs': blogs, 'featured': featured_blog})
     else:
         return redirect("logout")
 
@@ -105,7 +104,5 @@ def search(request):
     if "query" in request.GET:
         query = request.GET['query']
         results = BlogPost.objects.filter(title__icontains=query) | BlogPost.objects.filter(desc__icontains=query) | BlogPost.objects.filter(Content__icontains=query)
-        print(query)
-        print(results)
         return render(request, 'searchedblogs.html', {'results': results, 'query': query})
     return render(request, 'searchedblogs.html')

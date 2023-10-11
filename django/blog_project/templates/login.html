@@ -25,20 +25,18 @@
     </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: burlywood; font-family: Georgia, 'Times New Roman', Times, serif;">
+  <div class="container">
+      <a class="navbar-brand" href="/">Welcome to Family Blog</a>
+  </div>
+</nav>
 <br>
 <br>
 
-<div class="text-center " style="font-size: 16px;
-        letter-spacing: 1px;
-        color: grey;
-        font-weight: bold">
-    Welcome to <br>Family Blog.
-  <br><br><br>
-</div>
 <div class="container" style="max-width: 400px">
     <form method="post" action="">
         {% csrf_token %}
-          <span class="" style=" ">Enter</span><br><br>
+          <span>Enter details</span><br><br>
           <input type="text" placeholder="username" class="form-control" name="user" required><br>
           <input type="password" placeholder="password" class="form-control" name="pas" required><br>
           <button class="btn btn-primary" type="submit" name="log" >Login</button>

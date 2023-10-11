@@ -1,101 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ blog.title }} - Family Blog</title>
-    <!-- Include Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
-</head>
-<body>
+{% extends 'home.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">Family Blog</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/add/">Add Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/search/">Search</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout/">Logout</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+{% block title %}{{ blog.title }} - Family Blog{% endblock %}
+
+{% block content %}
 {% if deleteme is None %}
+
 
 <div class="container mt-4">
     <!-- Single Blog Post -->
-    <div class="row">
-        <div class="col-md-8">
-            <div id="imageCarousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    {% for image in blog_images %}
-                        {% if forloop.first %}
-                        <li data-target="#imageCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
-                        {% else %}
-                        <li data-target="#imageCarousel" data-slide-to="{{ forloop.counter0 }}"></li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
-
-                <!-- Slides -->
-                <div class="carousel-inner">
-                    {% for image in blog_images %}
-                        {% if forloop.first %}
-                        <div class="carousel-item active">
-                            <div class="image-container" style="height: 300px; width: 100%; overflow: hidden; border: 1px solid #1111;">
-                                <img src="{{ image.pic.url }}" alt="{{ blog.title }}" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                        </div>
-                        {% else %}
-                         <div class="carousel-item">
-                            <div class="image-container" style="height: 300px; width: 100%; overflow: hidden; border: 1px solid #1111;">
-                                <img src="{{ image.pic.url }}" alt="{{ blog.title }}" style="width: 100%; height: 100%; object-fit: contain;">
-                            </div>
-                        </div>
-                        {% endif %}
-
+    <!-- <div class="row" > -->
+        <div id="mycarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                {% for i in blog_images %}
+                    {% if forloop.counter == 1 %}
+                    <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                    {% else %}
+                    <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="{{ forloop.counter0 }}"></button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="carousel-box">
+                <div class="carousel-inner" >
+                    {% for i in blog_images %}
+                    {% if forloop.counter == 1 %}
+                    <div class="carousel-item active">
+                    {% else %}
+                    <div class="carousel-item">
+                    {% endif %}
+                    <img class="img-fluid d-block"  src="{{ i.pic.url }}" alt="blog img">
+                    </div>
                     {% endfor %}
                 </div>
-
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#imageCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#imageCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
+            
+            <!-- Carousel Controls -->
+            <a class="carousel-control-prev" href="#mycarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#mycarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
         </div>
-        <div>
-            <h2>{{ blog.title }}</h2>
-            <p>Published: {{ blog.date }}<br>Author: {{ blog.author }}</p>
-            <!-- Include the detailed content of the blog post here -->
-            <div>{{ blog.Content | safe }}</div><br>
-        </div><br>
-        {% if request.user.is_staff %}
-        <form method="post" action="">
-            {% csrf_token %}
-            <button type="submit" name="delete" class="btn btn-primary">Delete this blog</button>
-        </form><br><br>
-        {% endif %}
+
+    <br>
+    <h2>{{ blog.title }}</h2>
+    <div class="col-md " >
+            <div class="card mb-4 mx-auto" style="padding: 5px;background-color:rgba(222, 184, 135, 0.18)">
+                    <p>Published: {{ blog.date }}<br>Author: {{ blog.author }}</p>
+                    <!-- Include the detailed content of the blog post here -->
+                    <div>{{ blog.Content}}</div><br>
+            </div>
     </div>
+    {% if request.user.is_staff %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit" name="delete" class="btn btn-primary">Delete this blog</button>
+    </form><br><br>
+    {% endif %}
 </div>
 {% else %}
 <div class="container mt-4">
@@ -124,9 +88,4 @@
         {% endif %}
 </div>
 {% endif %}
-
-<!-- Include Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock%}

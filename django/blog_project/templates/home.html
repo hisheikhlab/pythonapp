@@ -3,14 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Blog</title>
+    <title>{% block title %}Family Blog{% endblock %}</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .main-carousel-box {
+            height: 300px;
+            /* border: 1px solid #000; */
+            overflow: hidden;
+        }
+    
+        .main-carousel-box img {
+            width: 100%;
+            /* height: 300px; */
+            object-fit: cover;
+        }
+        .carousel-box {
+            height: 300px;
+            /* border: 1px solid #000; */
+            overflow: hidden;
+        }
+    
+        .carousel-box img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+        }
+        .card-box {
+            height: 220px;
+            /* border: 1px solid #000; */
+            overflow: hidden;
+        }
+    
+        .card-box img {
+            width: 100%;
+            /* height: 200px; */
+            object-fit: contain;
+        }
+
+
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: burlywood; font-family: Georgia, 'Times New Roman', Times, serif;">
     <div class="container">
         <a class="navbar-brand" href="/">Family Blog</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -36,25 +73,58 @@
     </div>
 </nav>
 
-
+{% block content%}
 
 <div class="container mt-4">
-    <h2>Featured</h2>
-    <!-- Featured Blog Post -->
     <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <img src="{{featured.pic.url}}" style="padding-left: 20px; padding-top: 20px" width="30%" height="auto" alt="Featured Blog">
-                <div class="card-body">
-                    <h5 class="card-title">{{featured.title}}</h5>
-                    <p class="card-text">Published: {{featured.date}}<br>Author: {{featured.author}}</p>
-<!--                    <p class="card-text">{{featured.desc}}</p>-->
-                    <a href="/blog/{{ featured.id }}/" class="btn btn-primary">Read More</a>
+        <div class="col-md-8 mx-auto">
+            <!-- <div class="card mb-4" > -->
+                <div id="mycarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% for blog in blogs %}
+                            {% if forloop.counter == 1 %}
+                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                            {% else %}
+                            <button type="button" data-bs-target="#mycarousel" data-bs-slide-to="{{ forloop.counter0 }}"></button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                        <div class="carousel-inner" >
+                            {% for blog in blogs %}
+                                {% if forloop.counter == 1 %}
+                                    <div class="carousel-item active">
+                                {% else %}
+                                    <div class="carousel-item">
+                                {% endif %}
+                                {% with blog.images.first as i%}
+                                    <div class="main-carousel-box">
+                                      <img class="img-fluid d-block"  src="{{ i.pic.url }}" alt="blog img">
+                                    </div>
+                                {% endwith %}
+                                <div class="carousel-caption d-md-block ">
+                                    <h5>{{blog.title}}</h5>
+                                    <!-- <p>Some representative placeholder content for the second slide.</p> -->
+                                  </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    
+                    <!-- Carousel Controls -->
+                    <a class="carousel-control-prev" href="#mycarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#mycarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </div>
+
+
 
 <div class="container mt-4">
     <!-- Recent Blog Posts -->
@@ -62,56 +132,49 @@
     <div class="row">
         <!-- Mock Blog Post 1 -->
         {% for blog in blogs %}
-        <div class="col-md-4">
-            <div class="card mb-4" >
+        <div class="col-md-4 ">
+            <a href="/blog/{{ blog.id }}" style="text-decoration: none;">
+                <div class="card mb-4 mx-auto" style="background-color:rgba(222, 184, 135, 0.18); height: 95%; width: 92%;">
+                    <div class="card-box">
+                    {% with blog.images.first as blog_image %}
+                    <img src="{{blog_image.pic.url}}" class="card-img-top" alt="Blog" >
+                    {% endwith %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{blog.title}}</h5>
+                        <p class="card-text">{{blog.date}}<br>Author: {{blog.author}}</p>
+                        <!-- <p class="card-text">{{blog.desc}}</p> -->
+                        <!-- <a href="/blog/{{ blog.id}}/" class="btn btn-primary">Read More</a> -->
 
-                <img src="{{blog.pic.url}}" class="card-img-top" style="object-fit: cover; width: 100%; height: 100%;" alt="Blog" >
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- <div class="container mt-4">
+    <h2>Featured</h2>
+    Featured Blog Post
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="carousel-box">
+                {% with featured.images.first as blog_image %}
+                <img src="{{blog_image.pic.url}}" class="card-img-top" alt="Featured Blog">
+                {% endwith %}
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{blog.title}}</h5>
-                    <p class="card-text">Published: {{blog.date}}<br>Author: {{blog.author}}</p>
-<!--                    <p class="card-text">Author: {{blog.author}}</p>-->
-                    <p class="card-text">{{blog.desc}}</p>
-                    <a href="/blog/{{ blog.id}}/" class="btn btn-primary">Read More</a>
-
+                    <h5 class="card-title">{{featured.title}}</h5>
+                    <p class="card-text">Published: {{featured.date}}<br>Author: {{featured.author}}</p>
+                    <a href="/blog/{{ featured.id }}/" class="btn btn-primary">Read More</a>
                 </div>
             </div>
         </div>
-        {% endfor %}
-<!--        &lt;!&ndash; Mock Blog Post 2 &ndash;&gt;-->
-<!--        <div class="col-md-4">-->
-<!--            <div class="card mb-4">-->
-<!--                <img src="" class="card-img-top" alt="Blog 2">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">Baking Cookies Together</h5>-->
-<!--                    <p class="card-text">We spent a rainy day indoors baking delicious cookies as a family.</p>-->
-<!--                    <a href="/blog/3/" class="btn btn-primary">Read More</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; Mock Blog Post 3 &ndash;&gt;-->
-<!--        <div class="col-md-4">-->
-<!--            <div class="card mb-4">-->
-<!--                <img src="" class="card-img-top" alt="Blog 3">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">Our Family Vacation</h5>-->
-<!--                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>-->
-<!--                    <a href="/blog/4/" class="btn btn-primary">Read More</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        &lt;!&ndash; Mock Blog Post 4 &ndash;&gt;-->
-<!--        <div class="col-md-4">-->
-<!--            <div class="card mb-4">-->
-<!--                <img src="" class="card-img-top" alt="Blog 4">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">Vacation</h5>-->
-<!--                    <p class="card-text">We enjoyed a memorable vacation at the beach, building sandcastles and swimming in the ocean.</p>-->
-<!--                    <a href="/blog/4/" class="btn btn-primary">Read More</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
     </div>
-</div>
+</div> -->
+{% endblock%}
 
 <!-- Include Bootstrap JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
