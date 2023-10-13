@@ -134,4 +134,4 @@ EMAIL_PORT = 465
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'zunair323@gmail.com'
 EMAIL_HOST_PASSWORD = 'geiu zopm mdxh mkpi'
-EMAIL_HOST_PASSWORD = 'geiu zopm mdxh mkpi'
+# EMAIL_HOST_PASSWORD = 'geiu zopm mdxh mkpi'
